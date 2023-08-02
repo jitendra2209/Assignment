@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html>
+    <body>
+        <h2>List of buttons</h2>
+        <ul>
+            <li>0.Exit</li>
+            <li>1.Get Weather</li>
+            <li>2.Get Wind Speed</li>
+            <li>3.Get Pressure</li>
+        </ul>
+        <div>
+            <p>Enter your Input from 0 to 3</p>
+            <input id="option" type="number" min=0 max=3/>
+            <input id="date" type="date"/>
+            <button onclick="submitOption()">submit</button>
+        </div>
+        <div id="result">
+
+        </div>
+    </body>
+    <script>
+        async function submitOption(){
+            const option=document.getElementById("option").value;
+            const date=document.getElementById("date").value
+            if(option==0){
+                document.body.innerHTML="<h1>Exit</h1>"
+            }
+            else{
+                const ret=await fetch("http://localhost:3000/getData",{
+                    method:"post",
+                    headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify({
+                        option,
+                        date
+                    })
+                })
+                const res=await ret.json()
+                console.log(res)
+                document.getElementById("result").innerHTML=typeof(res)=="string"?res:JSON.stringify(res)
+            }
+        }
+    </script>
+</html>
